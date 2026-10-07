@@ -17,15 +17,26 @@
         </nav>
     </header>
     <main>
-        <section id="parent-container">
-            <nav-container id="parent-nav">
-                <nav id="child-nav">
-                    <a href="" class="container-nav">1</a>
-                    <a href="" class="container-nav">2</a>
-                    <a href="" class="container-nav">3</a>
-                </nav>
-            </nav-container>
-        </section>
+        <article id="parent-container">
+            <article id="parent-sökväg">
+                <input id="child-sökväg" type="text" placeholder="Skriv det du vill söka här...">
+            </article>
+            <section id="child-svar">
+                <article id="parent-release-analysis">
+                    <section id="child-release-analysis">
+                        <answer class="release-analysis">Antal tickets:</answer>
+                        <answer class="release-analysis">Antal timmar:</answer>
+                        <answer class="release-analysis">Antal blokerade:</answer>
+                        <answer class="release-analysis">Antal prioriteter:</answer>
+                    </section>
+                </article>
+                <section id="release-analysis-tickets">
+                    <ul>
+                        <li class="tickets"></li>
+                    </ul>
+                </section>
+            </section>
+        </article>
     </main>
     <footer>
         <h3>NTI Södertörn. All rights reserved ©</h3>
