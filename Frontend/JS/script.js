@@ -60,7 +60,7 @@ const rule5 = () => {
 const rule6 = () => {
     const releaseBlockers = [...rule1(), ...rule2()];
 
-    if (releaseBlockers.   length > 0) {
+    if (releaseBlockers.length > 0) {
         return "BLOCK";
     }
 
