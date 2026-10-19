@@ -21,6 +21,65 @@ const tickets = [
 5. Other open/testing tickets are ACTIVE. Done tickets are DONE.
 6. Release decision: BLOCK if any RELEASE_BLOCKER exists; otherwise REVIEW if there are any UNASSIGNED tickets or total active work hours > 35; otherwise RELEASE.
 */
+
+function LowMidHigh(severity) {
+    if (severity <= 2) {
+        return "Low";
+    } else if (severity === 3) {
+        return "Middle";
+    } else {
+        return "High";
+    }
+}
+
+function OwnerNull(owner) {
+    if (owner === null) {
+        return "Ingen ägare";
+    }
+
+    return owner;
+}
+
+function renderTasks(list) {
+    let container = document.getElementById("ticketHolder");
+    container.innerHTML = "";
+    for (let i = 0; i < list.length; i++) {
+        const task = list[i];
+        container.innerHTML += `
+        <li class="task-list"> 
+            <div id="UpperHalf">
+                <h1>${task.title}</h1>
+                <h2>Owner: ${OwnerNull(task.owner)}</h2>
+            </div>
+            <div id="LowerHalf">
+            <h3>Severity: ${LowMidHigh(task.severity)}</h3>
+                <h3>Status: ${task.status}</h3>
+                <h3>Blocked: ${task.blocked}</h3>
+            </div>
+        </li>
+        `;
+    }
+}
+renderTasks(tickets);
+
+function sök() {
+    const container = document.getElementById("child-sökväg");
+    const sökOrd = container.value.toLowerCase();
+
+    const filtered = tickets.filter(ticket =>
+        ticket.title.toLowerCase().includes(sökOrd) ||
+        (ticket.owner && ticket.owner.toLowerCase().includes(sökOrd)) ||
+        ticket.severity.toString().includes(sökOrd) ||
+        ticket.customerVip.toString().includes(sökOrd) ||
+        LowMidHigh(ticket.severity).toLowerCase().includes(sökOrd) ||
+        (ticket.owner === null && "ingen ägare".includes(sökOrd))
+    );
+
+    renderTasks(filtered);
+}
+
+document.getElementById("child-sökväg").addEventListener("input", sök);
+
 // 1. RELEASE_BLOCKER = blocked + severity >= 4
 const rule1 = () => tickets.filter(ticket =>
     ticket.blocked === true && ticket.severity >= 4
