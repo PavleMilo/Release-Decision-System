@@ -22,7 +22,7 @@ const tickets = [
 6. Release decision: BLOCK if any RELEASE_BLOCKER exists; otherwise REVIEW if there are any UNASSIGNED tickets or total active work hours > 35; otherwise RELEASE.
 */
 
-function LowMidHigh(severity) {
+function LowMidHigh(severity: number) {
     if (severity <= 2) {
         return "Low";
     } else if (severity === 3) {
@@ -32,16 +32,18 @@ function LowMidHigh(severity) {
     }
 }
 
-function OwnerNull(owner) {
+function OwnerNull(owner: string | null) {
     if (owner === null) {
         return "Ingen ägare";
     }
-
     return owner;
 }
 
-function renderTasks(list) {
-    let container = document.getElementById("ticketHolder");
+function renderTasks(list: typeof tickets) {
+    const container = document.getElementById("ticketHolder");
+    if (container === null) {
+        throw new Error('Elementet "#ticketHolder" hittades inte i dokumentet.');
+    }
     container.innerHTML = "";
     for (let i = 0; i < list.length; i++) {
         const task = list[i];
@@ -63,7 +65,10 @@ function renderTasks(list) {
 renderTasks(tickets);
 
 function sök() {
-    const container = document.getElementById("child-sökväg");
+    const container = document.getElementById("child-sökväg") as HTMLInputElement | null;
+    if (container === null) {
+        return;
+    }
     const sökOrd = container.value.toLowerCase();
 
     const filtered = tickets.filter(ticket =>
@@ -78,7 +83,10 @@ function sök() {
     renderTasks(filtered);
 }
 
-document.getElementById("child-sökväg").addEventListener("input", sök);
+const searchInput = document.getElementById("child-sökväg");
+if (searchInput !== null) {
+    searchInput.addEventListener("input", sök);
+}
 
 // 1. RELEASE_BLOCKER = blocked + severity >= 4
 const rule1 = () => tickets.filter(ticket =>
@@ -106,8 +114,7 @@ const rule4 = () => tickets.filter(ticket =>
 // 5. ACTIVE = open/testing, DONE = done
 const rule5 = () => {
     const active = tickets.filter(ticket =>
-        (ticket.status === "open" || ticket.status === "testing") &&
-        ticket.status !== "done"
+        ticket.status === "open" || ticket.status === "testing"
     );
 
     const done = tickets.filter(ticket => ticket.status === "done");
