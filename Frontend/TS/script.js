@@ -21,7 +21,7 @@ const tickets = [
 5. Other open/testing tickets are ACTIVE. Done tickets are DONE.
 6. Release decision: BLOCK if any RELEASE_BLOCKER exists; otherwise REVIEW if there are any UNASSIGNED tickets or total active work hours > 35; otherwise RELEASE.
 */
-function LowMidHigh(severity) {
+function betterSeverity(severity) {
     if (severity <= 2) {
         return "Low";
     }
@@ -98,7 +98,7 @@ function renderTasks(list) {
             </div>
             <div id="LowerHalf">
                 <h3>ID: ${task.id}</h3>
-                <h3>Severity: ${LowMidHigh(task.severity)}</h3>
+                <h3>Severity: ${betterSeverity(task.severity)}</h3>
                 <h3>Remaining hours: ${task.remainingHours}</h3>
                 <h3>Status: ${betterStatus(task.status)}</h3>
                 <h3>Blocked: ${betterBlocked(task.blocked)}</h3>
@@ -114,22 +114,29 @@ function sök() {
     if (container === null) {
         return;
     }
-    const sökOrd = container.value.toLowerCase();
-    const filtered = tickets.filter(ticket => ticket.title.toLowerCase().includes(sökOrd) ||
-        (ticket.owner && ticket.owner.toLowerCase().includes(sökOrd)) ||
-        ticket.severity.toString().includes(sökOrd) ||
-        ticket.customerVip.toString().includes(sökOrd) ||
-        ticket.status.toLowerCase().includes(sökOrd) ||
-        betterStatus(ticket.status).toLowerCase().includes(sökOrd) ||
-        betterBlocked(ticket.blocked).toLowerCase().includes(sökOrd) ||
-        betterVip(ticket.customerVip).toLowerCase().includes(sökOrd) ||
-        LowMidHigh(ticket.severity).toLowerCase().includes(sökOrd) ||
-        (ticket.owner === null && "ingen ägare".includes(sökOrd)));
+    const sökOrd = container.value.trim().toLowerCase();
+    const idSökOrd = sökOrd.replace(/^i/, "");
+    const numericQuery = /^\d+$/.test(sökOrd);
+    const filtered = tickets.filter(ticket => numericQuery
+        ? ticket.remainingHours === Number(sökOrd)
+        : ticket.title.toLowerCase().includes(sökOrd) ||
+            (idSökOrd !== "" && ticket.id.toString().includes(idSökOrd)) ||
+            (ticket.owner && ticket.owner.toLowerCase().includes(sökOrd)) ||
+            (ticket.customerVip && sökOrd === "vip") ||
+            betterStatus(ticket.status).toLowerCase().includes(sökOrd) ||
+            betterBlocked(ticket.blocked).toLowerCase().includes(sökOrd) ||
+            betterVip(ticket.customerVip).toLowerCase().includes(sökOrd) ||
+            betterSeverity(ticket.severity).toLowerCase().includes(sökOrd) ||
+            (ticket.owner === null && "ingen ägare".includes(sökOrd)));
     renderTasks(filtered);
 }
 const searchInput = document.getElementById("child-sökväg");
 if (searchInput !== null) {
     searchInput.addEventListener("input", sök);
+}
+const searchForm = document.getElementById("parent-sökväg");
+if (searchForm !== null) {
+    searchForm.addEventListener("submit", event => event.preventDefault());
 }
 // 1. RELEASE_BLOCKER = blocked + severity >= 4
 const rule1 = () => tickets.filter(ticket => ticket.blocked === true && ticket.severity >= 4);
