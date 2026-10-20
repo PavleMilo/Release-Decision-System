@@ -32,6 +32,24 @@ function LowMidHigh(severity: number) {
     }
 }
 
+function betterStatus(status: string) {
+    if (status === "open") {
+        return "Open";
+    } else if (status === "testing") {
+        return "Testing";
+    } else {
+        return "Done";
+    }
+}
+
+function betterBlocked(blocked: boolean) {
+    return blocked ? "Yes" : "No";
+}
+
+function betterVip(customerVip: boolean) {
+    return customerVip ? "Yes" : "No";
+}
+
 function OwnerNull(owner: string | null) {
     if (owner === null) {
         return "Ingen ägare";
@@ -39,11 +57,42 @@ function OwnerNull(owner: string | null) {
     return owner;
 }
 
+function antal(list: typeof tickets) {
+    const container = document.getElementById("child-release-analysis");
+    if (container === null) {
+        return;
+    }
+
+    let timmar = 0;
+    let blocked = 0;
+    let vipCustomers = 0;
+
+    for (const ticket of list) {
+        if (ticket.status === "open" || ticket.status === "testing") {
+            timmar += ticket.remainingHours;
+        }
+        if (ticket.blocked) {
+            blocked++;
+        }
+        if (ticket.customerVip) {
+            vipCustomers++;
+        }
+    }
+
+    container.innerHTML = `
+    <p class="release-analysis">Antal tickets: ${list.length}</p>
+    <p class="release-analysis">Aktiva timmar kvar: ${timmar}</p>
+    <p class="release-analysis">Antal blockerade: ${blocked}</p>
+    <p class="release-analysis">Antal VIP-tickets: ${vipCustomers}</p>
+    `;
+}
+
 function renderTasks(list: typeof tickets) {
     const container = document.getElementById("ticketHolder");
     if (container === null) {
         throw new Error('Elementet "#ticketHolder" hittades inte i dokumentet.');
     }
+    antal(list);
     container.innerHTML = "";
     for (let i = 0; i < list.length; i++) {
         const task = list[i];
@@ -54,9 +103,12 @@ function renderTasks(list: typeof tickets) {
                 <h2>Owner: ${OwnerNull(task.owner)}</h2>
             </div>
             <div id="LowerHalf">
-            <h3>Severity: ${LowMidHigh(task.severity)}</h3>
-                <h3>Status: ${task.status}</h3>
-                <h3>Blocked: ${task.blocked}</h3>
+                <h3>ID: ${task.id}</h3>
+                <h3>Severity: ${LowMidHigh(task.severity)}</h3>
+                <h3>Remaining hours: ${task.remainingHours}</h3>
+                <h3>Status: ${betterStatus(task.status)}</h3>
+                <h3>Blocked: ${betterBlocked(task.blocked)}</h3>
+                <h3>Vip: ${betterVip(task.customerVip)}</h3>
             </div>
         </li>
         `;
@@ -76,6 +128,10 @@ function sök() {
         (ticket.owner && ticket.owner.toLowerCase().includes(sökOrd)) ||
         ticket.severity.toString().includes(sökOrd) ||
         ticket.customerVip.toString().includes(sökOrd) ||
+        ticket.status.toLowerCase().includes(sökOrd) ||
+        betterStatus(ticket.status).toLowerCase().includes(sökOrd) ||
+        betterBlocked(ticket.blocked).toLowerCase().includes(sökOrd) ||
+        betterVip(ticket.customerVip).toLowerCase().includes(sökOrd) ||
         LowMidHigh(ticket.severity).toLowerCase().includes(sökOrd) ||
         (ticket.owner === null && "ingen ägare".includes(sökOrd))
     );
