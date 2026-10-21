@@ -103,6 +103,8 @@ function renderTasks(list) {
                 <h3>Status: ${betterStatus(task.status)}</h3>
                 <h3>Blocked: ${betterBlocked(task.blocked)}</h3>
                 <h3>Vip: ${betterVip(task.customerVip)}</h3>
+
+                <button class="ticket-edit" type="button">Redigera</button>
             </div>
         </li>
         `;
