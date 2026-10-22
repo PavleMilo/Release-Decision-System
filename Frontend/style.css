@@ -39,15 +39,161 @@ header h1 {
     flex-direction: column;
 }
 
+#parent-container-redigera {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+}
+
+#parent-container-redigera[hidden] {
+    display: none;
+}
+
+#edit-background {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#edit-window {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    height: 70%;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: antiquewhite;
+    overflow-y: auto;
+    border-radius: 10px;
+}
+
+#back-button {
+    width: 85px;
+    height: 35px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+#edit-content {
+    margin-top: 20px;
+}
+
+#ticket-edit-form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.popup-id-status {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 24px;
+}
+
+.popup-title-owner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.popup-id-status label,
+.popup-title-owner label,
+#redigera-popup-ner label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.popup-id-status input,
+.popup-id-status select,
+.popup-title-owner input,
+#redigera-popup-ner input:not([type="checkbox"]) {
+    min-width: 180px;
+    padding: 8px;
+    font: inherit;
+}
+
+.popup-id-status input[readonly] {
+    background-color: #e6e6e6;
+    cursor: not-allowed;
+}
+
+.popup-title-owner input {
+    min-width: min(360px, 70vw);
+}
+
+.popup-vip {
+    width: 100%;
+    padding: 12px 16px;
+    background-color: aquamarine;
+    border-radius: 6px;
+}
+
+.popup-vip label,
+#redigera-popup-ner label:last-child {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 8px;
+}
+
+#redigera-popup-ner {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-top: 20px;
+}
+
+.ticket-save {
+    padding: 8px 18px;
+    cursor: pointer;
+}
+
+.ticket-form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.ticket-delete {
+    padding: 8px 18px;
+    color: #fff;
+    background-color: #a00000;
+    border: 0;
+    cursor: pointer;
+}
+
+.edit-error {
+    color: #a00000;
+}
+
+
 #parent-sökväg {
     width: 100%;
     height: 10%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 25px;
 }
 
 #child-sökväg {
-    width: 20%;
+    width: min(40%, 420px);
     height: 30px;
-    margin: 25px 0px 10px 25px;
+    margin: 25px 0 10px;
+}
+
+#add-ticket-button {
+    height: 30px;
+    margin-top: 15px;
+    padding: 0 12px;
+    cursor: pointer;
 }
 
 .container-nav {
@@ -65,6 +211,21 @@ header h1 {
     min-height: 0;
     display: flex;
     flex-direction: column;
+}
+
+#release-decision-card {
+    height: 32px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+}
+
+#release-decision {
+    height: 30px;
+    width: auto;
+    margin-top: 15px;
+    background-color: aqua;
+    font-size: 20px;
 }
 
 #parent-release-analysis {
@@ -138,11 +299,11 @@ header h1 {
     font-size: 16px;
 }
 
-#LowerHalf{
+#LowerHalf {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap:15px;
+    gap: 15px;
     margin-left: 5px;
 }
 
