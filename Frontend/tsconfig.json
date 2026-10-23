@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["DOM", "ES2017"]
+  },
+  "include": ["TS/script.ts"]
+}

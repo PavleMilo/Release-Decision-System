@@ -18,19 +18,33 @@
     <main>
         <article id="parent-container">
             <form id="parent-sökväg">
-                <input id="child-sökväg" placeholder="Skriv det du vill söka här... (Att söka id gör man med I och sedan nummer)">
+                <input id="child-sökväg" placeholder="Skriv det du vill söka här...">
+                <button id="add-ticket-button" type="button">Lägg till ticket</button>
+                <p id="release-decision"></p>
+
             </form>
             <section id="child-svar">
+                <section id="release-decision-card" aria-live="polite">
+                </section>
                 <article id="parent-release-analysis">
                     <section id="child-release-analysis">
-
                     </section>
-                </article> 
+                </article>
                 <section id="release-analysis-tickets">
                     <ul id="ticketHolder">
-                        
+
                     </ul>
                 </section>
+            </section>
+        </article>
+        <article id="parent-container-redigera" hidden>
+            <div id="edit-background"></div>
+
+            <section id="edit-window">
+                <button id="back-button" type="button">Tillbaka</button>
+                <div id="edit-content">
+
+                </div>
             </section>
         </article>
     </main>
