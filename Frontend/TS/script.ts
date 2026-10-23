@@ -172,20 +172,28 @@ function sök() {
     if (container === null) {
         return;
     }
-    const sökOrd = container.value.toLowerCase();
+    const sökOrd = container.value.trim().toLowerCase();
+    const idSearch = sökOrd.match(/^i(\d+)$/);
+    const isHoursSearch = /^\d+$/.test(sökOrd);
 
-    const filtered = tickets.filter(ticket =>
-        ticket.title.toLowerCase().includes(sökOrd) ||
-        (ticket.owner && ticket.owner.toLowerCase().includes(sökOrd)) ||
-        ticket.severity.toString().includes(sökOrd) ||
-        ticket.customerVip.toString().includes(sökOrd) ||
-        ticket.status.toLowerCase().includes(sökOrd) ||
-        betterStatus(ticket.status).toLowerCase().includes(sökOrd) ||
-        betterBlocked(ticket.blocked).toLowerCase().includes(sökOrd) ||
-        betterVip(ticket.customerVip).toLowerCase().includes(sökOrd) ||
-        LowMidHigh(ticket.severity).toLowerCase().includes(sökOrd) ||
-        (ticket.owner === null && "ingen ägare".includes(sökOrd))
-    );
+    const filtered = tickets.filter(ticket => {
+        if (idSearch !== null) {
+            return ticket.id.toString() === idSearch[1];
+        }
+        if (isHoursSearch) {
+            return ticket.remainingHours === Number(sökOrd);
+        }
+
+        return ticket.title.toLowerCase().includes(sökOrd) ||
+            (ticket.owner && ticket.owner.toLowerCase().includes(sökOrd)) ||
+            ticket.customerVip.toString().includes(sökOrd) ||
+            ticket.status.toLowerCase().includes(sökOrd) ||
+            betterStatus(ticket.status).toLowerCase().includes(sökOrd) ||
+            betterBlocked(ticket.blocked).toLowerCase().includes(sökOrd) ||
+            betterVip(ticket.customerVip).toLowerCase().includes(sökOrd) ||
+            betterSeverity(ticket.severity).toLowerCase().includes(sökOrd) ||
+            (ticket.owner === null && "ingen ägare".includes(sökOrd));
+    });
 
     renderTasks(filtered);
 }
