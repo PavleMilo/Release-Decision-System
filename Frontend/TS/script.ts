@@ -74,7 +74,7 @@ const tickets: Ticket[] = loadTickets();
 6. Release decision: do not release if any ticket is blocked or total active remaining hours exceed 35.
 */
 
-function LowMidHigh(severity: number) {
+function betterSeverity(severity: number) {
     if (severity <= 2) {
         return "Low";
     } else if (severity === 3) {
@@ -207,7 +207,7 @@ function renderTasks(list: typeof tickets) {
             </div>
             <div id="LowerHalf">
                 <h3>ID: ${task.id}</h3>
-                <h3>Severity: ${LowMidHigh(task.severity)}</h3>
+                <h3>Severity: ${betterSeverity(task.severity)}</h3>
                 <h3>Remaining hours: ${task.remainingHours}</h3>
                 <h3>Status: ${betterStatus(task.status)}</h3>
                 <h3>Blocked: ${betterBlocked(task.blocked)}</h3>
@@ -433,6 +433,11 @@ if (addTicketButton !== null) {
 const searchInput = document.getElementById("child-sökväg");
 if (searchInput !== null) {
     searchInput.addEventListener("input", sök);
+}
+
+const searchForm = document.getElementById("parent-sökväg");
+if (searchForm !== null) {
+    searchForm.addEventListener("submit", event => event.preventDefault());
 }
 
 // 1. RELEASE_BLOCKER = blocked + severity >= 4
